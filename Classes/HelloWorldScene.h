@@ -31,7 +31,7 @@ class HelloWorld : public cocos2d::Scene
 {
 public:
     static cocos2d::Scene* createScene();
-	float a;
+	int state;//0=©,1=«,2=¨,3=ª
 	float width;
 	float height;
 	float spritewidth;

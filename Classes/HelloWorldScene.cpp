@@ -124,7 +124,7 @@ bool HelloWorld::init()
 	
 	spritewidth = (sprite->getContentSize().width / 2);
 	spriteheight = (sprite->getContentSize().height / 2);
-	sprite->setPosition(Vec2(0,0));//座標（始点は左下）
+	sprite->setPosition(Vec2(spritewidth,spriteheight));//座標（始点は左下）
 	//sprite->setFlippedX(true);//左右反転
 	//sprite->setFlippedY(true);//上下反転
 	sprite->setVisible(true);//表示するか否か
@@ -133,8 +133,9 @@ bool HelloWorld::init()
 	//sprite->setColor(Color3B(0x00, 0x00, 0x00));//色合いの設定
 	//sprite->setOpacity(0x80);//不透明度の設定
 	//最後の設定が反映される
-
+	state = 0;
 	this->scheduleUpdate();//Updateの有効化
+	
     return true;
 }
 
@@ -154,13 +155,45 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 void HelloWorld::update(float delta)
 {
+	Vec2 pos ;//現在座標の獲得
+	switch (state)
+	{
+	case 0:
+		pos = sprite->getPosition();
+		pos += Vec2(-5.0f, 0.0f);
+		sprite->setPosition(pos);
+		if (pos.x<=spritewidth)
+			state = 1;
+		break;
+	case 1:
+		pos = sprite->getPosition();
+		pos += Vec2(0.0f, -5.0f);
+		sprite->setPosition(pos);
+		if (pos.y <= spriteheight)
+			state = 2;
+		break;
+	case 2:
+		pos = sprite->getPosition();
+		pos += Vec2(5.0f, 0.0f);
+		sprite->setPosition(pos);
+		if (pos.x>=scenewidth)
+			state = 3;
+		break;
+	case 3:
+		pos = sprite->getPosition();
+		pos += Vec2(0.0f, 5.0f);
+		sprite->setPosition(pos);
+		if (pos.y >= sceneheight)
+			state = 0;
+		break;
+	}
 	//ここに更新処理を書く。
-	Vec2 pos = sprite->getPosition();//現在座標の獲得
-	Vec2 vel;
+	
+	
 	float rotate = sprite->getRotation();
 	float opacity = sprite->getOpacity();
 	//opacity -= 51.0f/60.0f;
-	if (pos.x>=0&&pos.x<width&&pos.y==0)
+	/*if (pos.x>=0&&pos.x<width&&pos.y==0)
 		vel= Vec2(1.0f, 0.0f);
 
 	else if (pos.x ==width  && pos.y >=0&&pos.y<height)
@@ -170,10 +203,8 @@ void HelloWorld::update(float delta)
 		vel= Vec2(-1.0f, 0.0f);
 
 	else if (pos.x == 0&& pos.y <= height&&pos.y > 0)
-		vel= Vec2(0.0f, -1.0f);
+		vel= Vec2(0.0f, -1.0f);*/
 	rotate += 1.0f;
-	pos += vel;
-	sprite->setPosition(pos);//移動の反映
 	sprite->setOpacity(opacity);
 	sprite->setRotation(rotate);
 	//獲得→書き換え→反映　これのループ
