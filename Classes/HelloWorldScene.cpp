@@ -51,7 +51,8 @@ bool HelloWorld::init()
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
+	width = visibleSize.width;
+	height = visibleSize.height;
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
     //    you may modify it.
@@ -116,9 +117,24 @@ bool HelloWorld::init()
     //    this->addChild(sprite, 0);
     //}
 	// テクスチャファイル名を指定して、スプライトを作成
-	Sprite* sprite = Sprite::create("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png");
+	sprite = Sprite::create("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png");
 	// シーングラフにつなぐ
 	this->addChild(sprite);
+	
+	
+	spritewidth = (sprite->getContentSize().width / 2);
+	spriteheight = (sprite->getContentSize().height / 2);
+	sprite->setPosition(Vec2(0,0));//座標（始点は左下）
+	//sprite->setFlippedX(true);//左右反転
+	//sprite->setFlippedY(true);//上下反転
+	sprite->setVisible(true);//表示するか否か
+	scenewidth = width - spritewidth;
+	sceneheight = height - spriteheight;
+	//sprite->setColor(Color3B(0x00, 0x00, 0x00));//色合いの設定
+	//sprite->setOpacity(0x80);//不透明度の設定
+	//最後の設定が反映される
+
+	this->scheduleUpdate();//Updateの有効化
     return true;
 }
 
@@ -134,4 +150,31 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
 
+}
+
+void HelloWorld::update(float delta)
+{
+	//ここに更新処理を書く。
+	Vec2 pos = sprite->getPosition();//現在座標の獲得
+	Vec2 vel;
+	float rotate = sprite->getRotation();
+	float opacity = sprite->getOpacity();
+	//opacity -= 51.0f/60.0f;
+	if (pos.x>=0&&pos.x<width&&pos.y==0)
+		vel= Vec2(1.0f, 0.0f);
+
+	else if (pos.x ==width  && pos.y >=0&&pos.y<height)
+		vel= Vec2(0.0f, 1.0f);
+
+	else if (pos.x <=width && pos.x > 0&&pos.y == height)
+		vel= Vec2(-1.0f, 0.0f);
+
+	else if (pos.x == 0&& pos.y <= height&&pos.y > 0)
+		vel= Vec2(0.0f, -1.0f);
+	rotate += 1.0f;
+	pos += vel;
+	sprite->setPosition(pos);//移動の反映
+	sprite->setOpacity(opacity);
+	sprite->setRotation(rotate);
+	//獲得→書き換え→反映　これのループ
 }
