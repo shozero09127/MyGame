@@ -32,10 +32,13 @@ class HelloWorld : public cocos2d::Scene
 public:
     static cocos2d::Scene* createScene();
 	int state;//0=©,1=«,2=¨,3=ª
+	int walk;//0=stay,1=right,2=stay,3=left
 	float width;
 	float height;
 	float spritewidth;
 	float spriteheight;
+	float spritewidthano;
+	float spriteheightano;
 	float scenewidth;
 	float sceneheight;
     virtual bool init();
@@ -47,6 +50,8 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 	cocos2d::Sprite*sprite;//update“à‚Å‚Ìsprite‚Ì‘€ì
+	cocos2d::Sprite*sprite2;
+	cocos2d::Sprite*spriterect;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

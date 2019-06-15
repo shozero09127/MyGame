@@ -118,22 +118,43 @@ bool HelloWorld::init()
     //}
 	// テクスチャファイル名を指定して、スプライトを作成
 	sprite = Sprite::create("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png");
+	sprite2 = Sprite::create("shien.png");
+	spriterect= Sprite::create("sample01.png");
+	
+	
 	// シーングラフにつなぐ
 	this->addChild(sprite);
+	this->addChild(sprite2);
+	this->addChild(spriterect);
 	
-	
+	spriterect->setAnchorPoint(Vec2(1.0f, 1.0f));
+	spriterect->setTextureRect(Rect(0.0f, 48.0f, 32.0f, 32.0f));
 	spritewidth = (sprite->getContentSize().width / 2);
-	spriteheight = (sprite->getContentSize().height / 2);
-	sprite->setPosition(Vec2(spritewidth,spriteheight));//座標（始点は左下）
-	//sprite->setFlippedX(true);//左右反転
+	spriteheight = (sprite->getContentSize().height / 2);/*
+	spritewidthano = (sprite2->getContentSize().width / 2);
+	spriteheightano = (sprite2->getContentSize().height / 2);*/
+	sprite->setPosition(Vec2(width/2,height/2));//座標（始点は左下）
+	spriterect->setPosition(Vec2(width / 2, height / 2));
+	sprite->setAnchorPoint(Vec2(0.5f, 0.5f));//画像の左下が0,0右上が1,0の座標系
+	//sprite2->setPosition(Vec2(width / 2, height / 2));//座標（始点は左下）
+	//sprite2->setAnchorPoint(Vec2(1.0f, 0.0f));//画像の左下が0,0右上が1,0の座標系
+	//sprite2->setScale(0.3f);
+	//sprite2->setScaleX(0.25f);
+	sprite2->setOpacity(0);
+	//sprite->setRotation(45.0f);
+	sprite->setFlippedX(true);//左右反転
 	//sprite->setFlippedY(true);//上下反転
+	sprite->setVisible(true);//表示するか否か
 	sprite->setVisible(true);//表示するか否か
 	scenewidth = width - spritewidth;
 	sceneheight = height - spriteheight;
-	//sprite->setColor(Color3B(0x00, 0x00, 0x00));//色合いの設定
+	sprite->setColor(Color3B(0.0f, 0.0f, 255.0f));//色合いの設定
+	
+
 	//sprite->setOpacity(0x80);//不透明度の設定
 	//最後の設定が反映される
 	state = 0;
+	walk = 0;
 	this->scheduleUpdate();//Updateの有効化
 	
     return true;
@@ -162,37 +183,67 @@ void HelloWorld::update(float delta)
 		pos = sprite->getPosition();
 		pos += Vec2(-5.0f, 0.0f);
 		sprite->setPosition(pos);
-		if (pos.x<=spritewidth)
+		if (pos.x <= 0)
+		{
 			state = 1;
+			sprite->setFlippedX(false);
+		}
+			
 		break;
 	case 1:
-		pos = sprite->getPosition();
-		pos += Vec2(0.0f, -5.0f);
-		sprite->setPosition(pos);
-		if (pos.y <= spriteheight)
 			state = 2;
 		break;
 	case 2:
 		pos = sprite->getPosition();
 		pos += Vec2(5.0f, 0.0f);
 		sprite->setPosition(pos);
-		if (pos.x>=scenewidth)
+		if (pos.x>=width)
+		{
 			state = 3;
+			sprite->setFlippedX(true);
+		}
 		break;
 	case 3:
-		pos = sprite->getPosition();
-		pos += Vec2(0.0f, 5.0f);
-		sprite->setPosition(pos);
-		if (pos.y >= sceneheight)
 			state = 0;
+		break;
+	}
+
+	switch (walk)
+	{
+	case 0:
+		
+		spriterect->setTextureRect(Rect(40.0f, 48.0f, 32.0f, 32.0f));
+		walk = 1;
+		break;
+	case 1:
+		spriterect->setTextureRect(Rect(0.0f, 48.0f, 32.0f, 32.0f));
+		walk = 2;
+		break;
+	case 2:
+		spriterect->setTextureRect(Rect(40.0f, 48.0f, 32.0f, 32.0f));
+		walk = 3;
+		break;
+	case 3:
+		spriterect->setTextureRect(Rect(80.0f, 48.0f, 32.0f, 32.0f));
+		walk = 0;
 		break;
 	}
 	//ここに更新処理を書く。
 	
 	
-	float rotate = sprite->getRotation();
-	float opacity = sprite->getOpacity();
-	//opacity -= 51.0f/60.0f;
+	//float rotate = sprite->getRotation();
+	//float opacity = sprite->getOpacity();
+
+
+	float b = sprite->getColor().b;
+	float r = sprite->getColor().r;
+	float g = sprite->getColor().g;
+	b-=1.0f;
+	r+=1.0f;
+	sprite->setColor(Color3B(r,g,b));
+
+/*
+	opacity -= 51.0f/60.0f;*/
 	/*if (pos.x>=0&&pos.x<width&&pos.y==0)
 		vel= Vec2(1.0f, 0.0f);
 
@@ -204,8 +255,9 @@ void HelloWorld::update(float delta)
 
 	else if (pos.x == 0&& pos.y <= height&&pos.y > 0)
 		vel= Vec2(0.0f, -1.0f);*/
-	rotate += 1.0f;
+	/*rotate += 1.0f;
 	sprite->setOpacity(opacity);
-	sprite->setRotation(rotate);
+	sprite2->setOpacity(-opacity);*/
+	//sprite->setRotation(rotate);
 	//獲得→書き換え→反映　これのループ
 }
