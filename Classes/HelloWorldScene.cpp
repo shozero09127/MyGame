@@ -117,24 +117,38 @@ bool HelloWorld::init()
     //    this->addChild(sprite, 0);
     //}
 	// テクスチャファイル名を指定して、スプライトを作成
-	sprite = Sprite::create("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png");
-	sprite2 = Sprite::create("shien.png");
-	spriterect= Sprite::create("sample01.png");
-	
-	
+
+	//乱数の初期化（あっちでいうRandom=new Random();
+	srand(time(nullptr));
+	for (int i=0;i<1;i++)
+	{
+		sprite[i] = Sprite::create("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png");
+		this->addChild(sprite[i]);
+		sprite[i]->setPosition(Vec2((width) / 2, (height) / 2));//座標（始点は左下）
+		//float mx, my;
+		//mx = (rand()*600/RAND_MAX)-300;//このままだととんでもなくでかい数値に・・・。
+		//my = (rand()*600 / RAND_MAX)-300;
+		FadeTo* action1 = FadeTo::create(1.0f, 0x00);
+		EaseIn* action2 = EaseIn::create(action1, 2.0f);
+		sprite[i]->runAction(action2);
+		/*
+		MoveTo* action3 = MoveTo::create(1.0f, Vec2(width, height));
+		EaseIn* action4 = EaseIn::create(action3, 2.0f);
+		sprite[i]->runAction(action4);*/
+	}
 	// シーングラフにつなぐ
-	this->addChild(sprite);
-	this->addChild(sprite2);
-	sprite2->setScale(0.3f);
-	sprite2->setScaleX(0.25f);
-	sprite->setPosition(Vec2(width / 2, height / 2));//座標（始点は左下）
-	sprite2->setPosition(Vec2(width / 2, height / 2));//座標（始点は左下）
-	MoveBy* action1 = MoveBy::create(1.0f, Vec2(300, 100));
-	MoveBy* action1a = MoveBy::create(1.0f, Vec2(300, 100));
+	sprite[1] = Sprite::create("shien.png");
+	this->addChild(sprite[1]);
+	sprite[1]->setScaleX(0.25f);
+	sprite[1]->setScaleY(0.3f);
+	sprite[1]->setPosition(Vec2((width ) / 2, (height ) / 2));
+	sprite[1]->setOpacity(0x00);
+	FadeTo*action3 = FadeTo::create(1.0f, 255);
+	EaseIn* action4 = EaseIn::create(action3, 2.0f);
+	sprite[1]->runAction(action4);
 	//MoveBy=指定した座標分移動する。
 	//MoveTo=指定した座標に移動する。
-	EaseIn* action2 = EaseIn::create(action1, 2.0f);
-	EaseIn* action2a = EaseIn::create(action1a, 2.0f);
+	
 	//EaseIn 元になるアクションを指定し、それを加速させる。
 	//FadeTo 指定したフェードに変化する。
 	//ScaleBy 指定した大きさへ変化する。Toは変更の影響を受ける。
@@ -143,8 +157,7 @@ bool HelloWorld::init()
 	//Blink 指定回数点滅する。青背景に赤画像でやるのは絶対にやめよう（迫真）
 
 	//sprite->runAction(action1);
-	sprite->runAction(action2);
-	sprite2->runAction(action2a);
+	
 	//this->addChild(sprite2);
 	//this->addChild(spriterect);
 	//
