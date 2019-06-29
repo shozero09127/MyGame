@@ -120,19 +120,30 @@ bool HelloWorld::init()
 
 	//乱数の初期化（あっちでいうRandom=new Random();
 	srand(time(nullptr));
+	Texture2D* texture = Director::getInstance()->getTextureCache()->addImage("sample01.png");
+	SpriteFrame* frame0 = SpriteFrame::createWithTexture(texture, Rect(32 * 0, 32 * 2, 32, 32));
+	SpriteFrame* frame1 = SpriteFrame::createWithTexture(texture, Rect(32 * 1, 32 * 2, 32, 32));
+	SpriteFrame* frame2 = SpriteFrame::createWithTexture(texture, Rect(32 * 2, 32 * 2, 32, 32));
+	SpriteFrame* frame3 = SpriteFrame::createWithTexture(texture, Rect(32 * 1, 32 * 2, 32, 32));
+	Vector<SpriteFrame*>animFrames(4);
+	animFrames.pushBack(frame0);
+	animFrames.pushBack(frame1);
+	animFrames.pushBack(frame2);
+	animFrames.pushBack(frame3);
 	for (int i=0;i<1;i++)
 	{
 		sprite[i] = Sprite::create("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png");
 		this->addChild(sprite[i]);
-		sprite[i]->setPosition(Vec2((width), (height)));//座標（始点は左下）
+		//sprite[i]->setPosition(Vec2((width), (height)));//座標（始点は左下）
 		//float mx, my;
 		//mx = (rand()*600/RAND_MAX)-300;//このままだととんでもなくでかい数値に・・・。
 		//my = (rand()*600 / RAND_MAX)-300;
-		MoveTo* action1 = MoveTo::create(1.0f, Vec2(0,height));
-		MoveTo* action2 = MoveTo::create(1.0f, Vec2(0, 0));
-		MoveTo* action3 = MoveTo::create(1.0f, Vec2(width, 0));
-		MoveTo* action4 = MoveTo::create(1.0f, Vec2(width, height));
-		Sequence* action5 = Sequence::create(action1, action2, action3, action4, nullptr);
+		/*MoveTo* action1 = MoveTo::create(1.0f, Vec2(0,height));
+		MoveTo* action2 = MoveTo::create(1.0f, Vec2(0, 0));*/
+		MoveTo* action1 = MoveTo::create(1.0f, Vec2(width/2, 0));
+		JumpBy* action2 = JumpBy::create(1.0f, Vec2(100.0f, 0.0f),200.0f,1);
+
+		//Sequence* action5 = Sequence::create(action1, action2, action3, action4, nullptr);
 		//Repeat* action2 = Repeat::create(action1,3);//回数を指定して反復
 		//RepeatForever* action2 = RepeatForever::create(action1);//永遠に反復
 		/*Sequence* action3 = Sequence::create(action1, action2, nullptr);
@@ -141,9 +152,11 @@ bool HelloWorld::init()
 		Sequence* action6 = Sequence::create(action4, action5, nullptr);
 		Spawn* action7 = Spawn::create(action3, action6, nullptr);
 		Repeat* action8 = Repeat::create(action7, 5);*/
-		RepeatForever *action6 = RepeatForever::create(action5);
+		Repeat *action3 = Repeat::create(action2,100);
+		Sequence *action4 = Sequence::create(action1, action3, nullptr);//これだとRepeatForeverのアクションが呼び出されない。
+		
 		//順番で実行する。
-		sprite[i]->runAction(action6);
+		sprite[i]->runAction(action4);
 		/*
 		MoveTo* action3 = MoveTo::create(1.0f, Vec2(width, height));
 		EaseIn* action4 = EaseIn::create(action3, 2.0f);
