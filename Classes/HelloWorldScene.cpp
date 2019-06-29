@@ -128,18 +128,22 @@ bool HelloWorld::init()
 		//float mx, my;
 		//mx = (rand()*600/RAND_MAX)-300;//このままだととんでもなくでかい数値に・・・。
 		//my = (rand()*600 / RAND_MAX)-300;
-		MoveTo* action1 = MoveTo::create(1.0f, Vec2(0,0));
-		MoveTo* action2 = MoveTo::create(1.0f, Vec2(width, height));
+		MoveTo* action1 = MoveTo::create(1.0f, Vec2(0,height));
+		MoveTo* action2 = MoveTo::create(1.0f, Vec2(0, 0));
+		MoveTo* action3 = MoveTo::create(1.0f, Vec2(width, 0));
+		MoveTo* action4 = MoveTo::create(1.0f, Vec2(width, height));
+		Sequence* action5 = Sequence::create(action1, action2, action3, action4, nullptr);
 		//Repeat* action2 = Repeat::create(action1,3);//回数を指定して反復
 		//RepeatForever* action2 = RepeatForever::create(action1);//永遠に反復
-		Sequence* action3 = Sequence::create(action1, action2, nullptr);
+		/*Sequence* action3 = Sequence::create(action1, action2, nullptr);
 		FadeTo *action4 = FadeTo::create(1.0f,0000);
 		FadeTo *action5 = FadeTo::create(1.0f, 255);
 		Sequence* action6 = Sequence::create(action4, action5, nullptr);
 		Spawn* action7 = Spawn::create(action3, action6, nullptr);
-		Repeat* action8 = Repeat::create(action7, 5);
+		Repeat* action8 = Repeat::create(action7, 5);*/
+		RepeatForever *action6 = RepeatForever::create(action5);
 		//順番で実行する。
-		sprite[i]->runAction(action8);
+		sprite[i]->runAction(action6);
 		/*
 		MoveTo* action3 = MoveTo::create(1.0f, Vec2(width, height));
 		EaseIn* action4 = EaseIn::create(action3, 2.0f);
