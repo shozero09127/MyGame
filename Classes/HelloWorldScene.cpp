@@ -124,20 +124,29 @@ bool HelloWorld::init()
 	{
 		sprite[i] = Sprite::create("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png");
 		this->addChild(sprite[i]);
-		sprite[i]->setPosition(Vec2((width) / 2, (height) / 2));//座標（始点は左下）
+		sprite[i]->setPosition(Vec2((width), (height)));//座標（始点は左下）
 		//float mx, my;
 		//mx = (rand()*600/RAND_MAX)-300;//このままだととんでもなくでかい数値に・・・。
 		//my = (rand()*600 / RAND_MAX)-300;
-		FadeTo* action1 = FadeTo::create(1.0f, 0x00);
-		EaseIn* action2 = EaseIn::create(action1, 2.0f);
-		sprite[i]->runAction(action2);
+		MoveTo* action1 = MoveTo::create(1.0f, Vec2(0,0));
+		MoveTo* action2 = MoveTo::create(1.0f, Vec2(width, height));
+		//Repeat* action2 = Repeat::create(action1,3);//回数を指定して反復
+		//RepeatForever* action2 = RepeatForever::create(action1);//永遠に反復
+		Sequence* action3 = Sequence::create(action1, action2, nullptr);
+		FadeTo *action4 = FadeTo::create(1.0f,0000);
+		FadeTo *action5 = FadeTo::create(1.0f, 255);
+		Sequence* action6 = Sequence::create(action4, action5, nullptr);
+		Spawn* action7 = Spawn::create(action3, action6, nullptr);
+		Repeat* action8 = Repeat::create(action7, 5);
+		//順番で実行する。
+		sprite[i]->runAction(action8);
 		/*
 		MoveTo* action3 = MoveTo::create(1.0f, Vec2(width, height));
 		EaseIn* action4 = EaseIn::create(action3, 2.0f);
 		sprite[i]->runAction(action4);*/
 	}
 	// シーングラフにつなぐ
-	sprite[1] = Sprite::create("shien.png");
+	/*sprite[1] = Sprite::create("shien.png");
 	this->addChild(sprite[1]);
 	sprite[1]->setScaleX(0.25f);
 	sprite[1]->setScaleY(0.3f);
@@ -145,7 +154,7 @@ bool HelloWorld::init()
 	sprite[1]->setOpacity(0x00);
 	FadeTo*action3 = FadeTo::create(1.0f, 255);
 	EaseIn* action4 = EaseIn::create(action3, 2.0f);
-	sprite[1]->runAction(action4);
+	sprite[1]->runAction(action4);*/
 	//MoveBy=指定した座標分移動する。
 	//MoveTo=指定した座標に移動する。
 	
