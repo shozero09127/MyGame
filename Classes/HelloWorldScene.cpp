@@ -24,6 +24,7 @@
 
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
+#include"AudioEngine.h"
 
 USING_NS_CC;
 
@@ -103,6 +104,9 @@ bool HelloWorld::init()
     }
 
     // add "HelloWorld" splash screen"
+	//experimental::AudioEngine::play2d("cyrf_satellite_reactor.mp3");
+	
+	audioID=experimental::AudioEngine::play2d("shortbomb.mp3");
     //auto sprite = Sprite::create("HelloWorld.png");
     //if (sprite == nullptr)
     //{
@@ -119,29 +123,15 @@ bool HelloWorld::init()
 	// テクスチャファイル名を指定して、スプライトを作成
 
 	//乱数の初期化（あっちでいうRandom=new Random();
-	srand(time(nullptr));
-	Texture2D* texture = Director::getInstance()->getTextureCache()->addImage("sample01.png");
-	SpriteFrame* frame0 = SpriteFrame::createWithTexture(texture, Rect(32 * 0, 32 * 2, 32, 32));
-	SpriteFrame* frame1 = SpriteFrame::createWithTexture(texture, Rect(32 * 1, 32 * 2, 32, 32));
-	SpriteFrame* frame2 = SpriteFrame::createWithTexture(texture, Rect(32 * 2, 32 * 2, 32, 32));
-	SpriteFrame* frame3 = SpriteFrame::createWithTexture(texture, Rect(32 * 1, 32 * 2, 32, 32));
-	Vector<SpriteFrame*>animFrames(4);
-	animFrames.pushBack(frame0);
-	animFrames.pushBack(frame1);
-	animFrames.pushBack(frame2);
-	animFrames.pushBack(frame3);
-	for (int i=0;i<1;i++)
-	{
-		sprite[i] = Sprite::create("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png");
-		this->addChild(sprite[i]);
 		//sprite[i]->setPosition(Vec2((width), (height)));//座標（始点は左下）
 		//float mx, my;
 		//mx = (rand()*600/RAND_MAX)-300;//このままだととんでもなくでかい数値に・・・。
 		//my = (rand()*600 / RAND_MAX)-300;
 		/*MoveTo* action1 = MoveTo::create(1.0f, Vec2(0,height));
 		MoveTo* action2 = MoveTo::create(1.0f, Vec2(0, 0));*/
+		/*
 		MoveTo* action1 = MoveTo::create(1.0f, Vec2(width/2, 0));
-		JumpBy* action2 = JumpBy::create(1.0f, Vec2(100.0f, 0.0f),200.0f,1);
+		JumpBy* action2 = JumpBy::create(1.0f, Vec2(100.0f, 0.0f),200.0f,1);*/
 
 		//Sequence* action5 = Sequence::create(action1, action2, action3, action4, nullptr);
 		//Repeat* action2 = Repeat::create(action1,3);//回数を指定して反復
@@ -152,16 +142,15 @@ bool HelloWorld::init()
 		Sequence* action6 = Sequence::create(action4, action5, nullptr);
 		Spawn* action7 = Spawn::create(action3, action6, nullptr);
 		Repeat* action8 = Repeat::create(action7, 5);*/
-		Repeat *action3 = Repeat::create(action2,100);
-		Sequence *action4 = Sequence::create(action1, action3, nullptr);//これだとRepeatForeverのアクションが呼び出されない。
-		
+		//Repeat *action3 = Repeat::create(action2,100);
+		//Sequence *action4 = Sequence::create(action1, action3, nullptr);//これだとRepeatForeverのアクションが呼び出されない。
+		//
 		//順番で実行する。
-		sprite[i]->runAction(action4);
+		/*sprite[i]->runAction(action4);*/
 		/*
 		MoveTo* action3 = MoveTo::create(1.0f, Vec2(width, height));
 		EaseIn* action4 = EaseIn::create(action3, 2.0f);
-		sprite[i]->runAction(action4);*/
-	}
+		sprite[i]->runAction(action4);*
 	// シーングラフにつなぐ
 	/*sprite[1] = Sprite::create("shien.png");
 	this->addChild(sprite[1]);
@@ -182,18 +171,6 @@ bool HelloWorld::init()
 	//RotateBy 指定した座標分回転する。対応する軸で変更する。度数参照。
 	//Blink 指定回数点滅する。青背景に赤画像でやるのは絶対にやめよう（迫真）
 
-	//sprite->runAction(action1);
-	
-	//this->addChild(sprite2);
-	//this->addChild(spriterect);
-	//
-	//spriterect->setAnchorPoint(Vec2(1.0f, 1.0f));
-	//spriterect->setTextureRect(Rect(0.0f, 48.0f, 32.0f, 32.0f));
-	//spritewidth = (sprite->getContentSize().width / 2);
-	//spriteheight = (sprite->getContentSize().height / 2);/*
-	//spritewidthano = (sprite2->getContentSize().width / 2);
-	//spriteheightano = (sprite2->getContentSize().height / 2);*/
-	
 	//spriterect->setPosition(Vec2(width / 2, height / 2));
 	//sprite->setAnchorPoint(Vec2(0.5f, 0.5f));//画像の左下が0,0右上が1,0の座標系
 	////sprite2->setPosition(Vec2(width / 2, height / 2));//座標（始点は左下）
@@ -214,6 +191,12 @@ bool HelloWorld::init()
 	////最後の設定が反映される
 	//state = 0;
 	//walk = 0;
+	/*CallFunc*action = CallFunc::create(CC_CALLBACK_0(HelloWorld::myFunction, this));
+	this->runAction(action);*/
+	
+	sprite = Sprite::create("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png");
+
+	this->addChild(sprite);
 	this->scheduleUpdate();//Updateの有効化
 	
     return true;
@@ -235,8 +218,17 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 void HelloWorld::update(float delta)
 {
-
-
+	timer--;
+	if (timer == 0)
+	{
+		CallFunc*action = CallFunc::create(CC_CALLBACK_0(HelloWorld::setRandom, this));
+		this->runAction(action);
+		CallFunc*action1 = CallFunc::create(CC_CALLBACK_0(HelloWorld::myFunction, this));
+		this->runAction(action1);
+		CallFunc*action2 = CallFunc::create(CC_CALLBACK_0(HelloWorld::soundPlay, this));
+		this->runAction(action2);
+		timer = 60;
+	}
 //	Vec2 pos ;//現在座標の獲得
 //	switch (state)
 //	{
@@ -321,4 +313,19 @@ void HelloWorld::update(float delta)
 //	sprite2->setOpacity(-opacity);*/
 //	//sprite->setRotation(rotate);
 //	//獲得→書き換え→反映　これのループ
+}
+
+void HelloWorld::myFunction()
+{
+	sprite->setPosition(Vec2(randomscorex, randomscorey));
+}
+
+void HelloWorld::soundPlay()
+{
+	experimental::AudioEngine::play2d("shortbomb.mp3");
+}
+void HelloWorld::setRandom()
+{
+	randomscorex = cocos2d::random<int>(1, width / 10) * 10;
+	randomscorey = cocos2d::random<int>(1, height / 10) * 10;
 }
