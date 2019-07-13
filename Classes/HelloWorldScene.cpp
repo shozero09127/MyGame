@@ -106,7 +106,7 @@ bool HelloWorld::init()
     // add "HelloWorld" splash screen"
 	//experimental::AudioEngine::play2d("cyrf_satellite_reactor.mp3");
 	
-	audioID=experimental::AudioEngine::play2d("shortbomb.mp3");
+	//audioID=experimental::AudioEngine::play2d("shortbomb.mp3");
     //auto sprite = Sprite::create("HelloWorld.png");
     //if (sprite == nullptr)
     //{
@@ -193,10 +193,16 @@ bool HelloWorld::init()
 	//walk = 0;
 	/*CallFunc*action = CallFunc::create(CC_CALLBACK_0(HelloWorld::myFunction, this));
 	this->runAction(action);*/
+	field = Sprite::create("senjo.png");
+	field->setPosition(Vec2(width / 2, height / 2));
+	this->addChild(field);
+	CallFunc*maction = CallFunc::create(CC_CALLBACK_0(HelloWorld::dokanPop, this));
+	CallFunc*kaction = CallFunc::create(CC_CALLBACK_0(HelloWorld::warpStar, this));
+	Sequence* action3 = Sequence::create(maction, kaction, nullptr);
+	CallFunc*countaction = CallFunc::create(CC_CALLBACK_0(HelloWorld::countdown, this));
+	this->runAction(countaction);
+	this->runAction(action3);
 	
-	sprite = Sprite::create("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png");
-
-	this->addChild(sprite);
 	this->scheduleUpdate();//UpdateÇÃóLå¯âª
 	
     return true;
@@ -216,9 +222,11 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 }
 
+
+
 void HelloWorld::update(float delta)
 {
-	timer--;
+	/*timer--;
 	if (timer == 0)
 	{
 		CallFunc*action = CallFunc::create(CC_CALLBACK_0(HelloWorld::setRandom, this));
@@ -228,7 +236,7 @@ void HelloWorld::update(float delta)
 		CallFunc*action2 = CallFunc::create(CC_CALLBACK_0(HelloWorld::soundPlay, this));
 		this->runAction(action2);
 		timer = 60;
-	}
+	}*/
 //	Vec2 pos ;//åªç›ç¿ïWÇÃälìæ
 //	switch (state)
 //	{
@@ -328,4 +336,89 @@ void HelloWorld::setRandom()
 {
 	randomscorex = cocos2d::random<int>(1, width / 10) * 10;
 	randomscorey = cocos2d::random<int>(1, height / 10) * 10;
+}
+void HelloWorld::dokanPop()
+{
+	dokan = Sprite::create("s_dokan.png");
+	marioawake = Sprite::create("s_marioawake.png");
+	dokan->setPosition(Vec2((width * 20) / 100, (height * 25) / 100));
+	dokan->setScale(0.7f);
+	marioawake->setPosition(Vec2((width * 20) / 100, (height * 30) / 100));
+	
+	MoveBy* action1 = MoveBy::create(0.5f, Vec2(0, 20));
+	MoveBy* action2 = MoveBy::create(0.5f, Vec2(0, -40));
+	JumpBy* maction1 = JumpBy::create(1.0f, Vec2(0, 0),120,1);
+	CallFunc*maction2 = CallFunc::create(CC_CALLBACK_0(HelloWorld::marioStand, this));
+	Sequence* maction3 = Sequence::create(maction1, maction2, nullptr);
+	RemoveSelf*action3 = RemoveSelf::create();
+	Sequence* action4 = Sequence::create(action1, action2,action3, nullptr);
+	dokan->runAction(action4);
+	marioawake->runAction(maction3);
+	this->addChild(marioawake);
+	this->addChild(dokan);
+}
+void HelloWorld::warpStar()
+{
+	warpstark = Sprite::create("kirbywarpstar.png");
+	warpstark->setPosition(Vec2((width * 105) / 100, (height * 105) / 100));
+	warpstark->setScale(0.5f);
+
+	DelayTime* action1 = DelayTime::create(1.0f);
+	MoveTo* action2 = MoveTo::create(0.5f, Vec2((width * 80) / 100, (height * 30) / 100));
+	CallFunc*action3 = CallFunc::create(CC_CALLBACK_0(HelloWorld::kirbyStand, this));
+	Sequence* action4 = Sequence::create(action1, action2,action3,  nullptr);
+	warpstark->runAction(action4);
+	/*
+	dokan->setScale(0.7f);
+	MoveBy* action1 = MoveBy::create(0.5f, Vec2(0, 40));
+	MoveBy* action2 = MoveBy::create(0.5f, Vec2(0, -40));
+	Sequence* action4 = Sequence::create(action1, action2, nullptr);*//*
+	dokan->runAction(action4);*/
+	this->addChild(warpstark);
+}
+
+void HelloWorld::kirbyStand()
+{
+	warpstark->setTexture("kkk.png");
+	JumpBy* action1 = JumpBy::create(0.5f, Vec2(-20, 0), 70, 1);
+	warpstark->runAction(action1);
+}
+
+void HelloWorld::marioStand()
+{
+	marioawake->setTexture("mariostand.png");
+	marioawake->setScale(1.5f);
+}
+void HelloWorld::countdown()
+{
+	audioID = experimental::AudioEngine::play2d("countdowncut.mp3");
+	countmoji[3] = Sprite::create("3.png");
+	countmoji[2] = Sprite::create("2.png");
+	countmoji[1] = Sprite::create("1.png");
+	countmoji[0] = Sprite::create("GO!.png");
+	for (int i = 0; i < 4; i++)
+	{
+		countmoji[i]->setPosition(Vec2((width * 50) / 100, (height * 90) / 100));
+		countmoji[i]->setOpacity(0);
+		this->addChild(countmoji[i]);
+	}
+	FadeTo*actionout = FadeTo::create(0.8f, 255);
+	FadeTo*actionin = FadeTo::create(0.2f, 0);
+	RemoveSelf*remove = RemoveSelf::create();
+	DelayTime*delayone = DelayTime::create(1.0f);
+	DelayTime*delaytwo = DelayTime::create(2.0f);
+	DelayTime*delaythree = DelayTime::create(3.0f);
+	FadeTo*actiongoout = FadeTo::create(0.2f, 255);
+	ScaleBy*scaleaction = ScaleBy::create(1.0f, 2.0f);
+	Spawn*fadeon = Spawn::create(actiongoout, scaleaction, nullptr);
+
+	Sequence*action = Sequence::create(actionout, actionin, remove, nullptr);
+	Sequence*actiontwo = Sequence::create(delayone, action, remove, nullptr);
+	Sequence*actionone = Sequence::create(delaytwo, action, remove, nullptr);
+	Sequence*actiongo = Sequence::create(delaythree, fadeon,actionin, remove, nullptr);
+
+	countmoji[3]->runAction(action);
+	countmoji[2]->runAction(actiontwo);
+	countmoji[1]->runAction(actionone);
+	countmoji[0]->runAction(actiongo);
 }

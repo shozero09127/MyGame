@@ -50,14 +50,27 @@ public:
     
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
+	void countdown();
+	void dokanPop();
+	void warpStar();
+	void kirbyStand();
+	void marioStand();
 	void myFunction();
 	void soundPlay();
 	void setRandom();
+	void lastSmashmario();
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 	cocos2d::Sprite*sprite;//updateì‡Ç≈ÇÃspriteÇÃëÄçÏ
 	cocos2d::Sprite*sprite2;
 	cocos2d::Sprite*spriterect;
+	cocos2d::Sprite*field;
+	cocos2d::Sprite*dokan;
+	cocos2d::Sprite*warpstark;
+	cocos2d::Sprite*marioawake;
+	cocos2d::Sprite*mariofinal[5];
+	cocos2d::Sprite*urtlasword[10];
+	cocos2d:: Sprite*countmoji[4];
 };
 
 #endif // __HELLOWORLD_SCENE_H__
