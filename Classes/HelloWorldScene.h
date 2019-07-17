@@ -34,6 +34,7 @@ public:
 	int state;//0=Å©,1=Å´,2=Å®,3=Å™
 	int walk;//0=stay,1=right,2=stay,3=left
 	int audioID;
+	int countdownID;
 	int timer = 60;
 	int randomscorex;
 	int randomscorey;
@@ -58,7 +59,12 @@ public:
 	void myFunction();
 	void soundPlay();
 	void setRandom();
+	void bowserjump();
 	void lastSmashmario();
+	void lastSmashkirby();
+	void viranapproach();
+	void screenmapper();
+	void challengerapproach();
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 	cocos2d::Sprite*sprite;//updateì‡Ç≈ÇÃspriteÇÃëÄçÏ
@@ -69,8 +75,11 @@ public:
 	cocos2d::Sprite*warpstark;
 	cocos2d::Sprite*marioawake;
 	cocos2d::Sprite*mariofinal[5];
-	cocos2d::Sprite*urtlasword[10];
+	cocos2d::Sprite*ultrasword;
 	cocos2d:: Sprite*countmoji[4];
+	cocos2d::Sprite*bowser;
+	cocos2d::Sprite*dedede;
+	cocos2d::Sprite*challenger;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
