@@ -74,7 +74,7 @@ public:
 	cocos2d::Sprite*dokan;
 	cocos2d::Sprite*warpstark;
 	cocos2d::Sprite*marioawake;
-	cocos2d::Sprite*mariofinal[5];
+	cocos2d::Sprite*mariofinal;
 	cocos2d::Sprite*ultrasword;
 	cocos2d:: Sprite*countmoji[4];
 	cocos2d::Sprite*bowser;

@@ -208,6 +208,7 @@ bool HelloWorld::init()
 	CallFunc*challenging = CallFunc::create(CC_CALLBACK_0(HelloWorld::challengerapproach, this));
 	CallFunc*bowserjumping = CallFunc::create(CC_CALLBACK_0(HelloWorld::bowserjump, this));
 	CallFunc*kirbylast = CallFunc::create(CC_CALLBACK_0(HelloWorld::lastSmashkirby, this));
+	CallFunc*mariolast = CallFunc::create(CC_CALLBACK_0(HelloWorld::lastSmashmario, this));
 	DelayTime*delays = DelayTime::create(3.2f);
 	DelayTime*cutdelays = DelayTime::create(0.5f);
 	Sequence*virandelay = Sequence::create(delays, actionviran,screen,cutdelays,challenging,bowserjumping, nullptr);
@@ -215,7 +216,7 @@ bool HelloWorld::init()
 
 	this->runAction(countset);
 	this->runAction(action3);
-	this->runAction(kirbylast);
+	this->runAction(mariolast);
 	this->scheduleUpdate();//Updateの有効化
 
 	
@@ -518,6 +519,66 @@ void HelloWorld::lastSmashkirby()
 
 		this->addChild(ultrasword,200);
 	
+}
+void HelloWorld::lastSmashmario()
+{
+
+	// アニメーションパターンからSpriteを生成
+	mariofinal = Sprite::create("mariofinal5.png");
+	mariofinal->setPosition(Vec2(width / 2, height / 2));
+	mariofinal->setScale(0.6f);	// 拡大
+
+	Animation* animation = Animation::create();
+	for (int i = 1; i <= 1; i++)
+	{
+		char szName[100] = { 0 };
+		sprintf(szName, "mariofinal%d.png", i);
+		animation->addSpriteFrameWithFile(szName);
+
+	}
+	animation->setDelayPerUnit(1.1f);
+	animation->setRestoreOriginalFrame(true);
+
+	Animation* animation2 = Animation::create();
+	for (int i = 2; i <= 3; i++)
+	{
+		char szName[100] = { 0 };
+		sprintf(szName, "mariofinal%d.png", i);
+		animation2->addSpriteFrameWithFile(szName);
+
+	}
+	animation2->setDelayPerUnit(0.5f);
+	animation2->setRestoreOriginalFrame(true);
+
+	Animation* animation3 = Animation::create();
+	for (int i = 3; i <= 4; i++)
+	{
+		char szName[100] = { 0 };
+		sprintf(szName, "mariofinal%d.png", i);
+		animation3->addSpriteFrameWithFile(szName);
+
+	}
+	animation3->setDelayPerUnit(0.5f);
+	animation3->setRestoreOriginalFrame(true);
+
+	
+
+	// アニメーションデータからアニメーションアクションを生成
+	Animate* animate = Animate::create(animation);
+	Animate* animate2 = Animate::create(animation2);
+	Animate* animate3 = Animate::create(animation3);
+	MoveBy*action1 = MoveBy::create(0.03f, Vec2(20, 40));
+	MoveBy*action2 = MoveBy::create(0.05f, Vec2(-30, -30));
+	MoveBy*action3 = MoveBy::create(0.05f, Vec2(30, 30));
+	MoveBy*action4 = MoveBy::create(0.03f, Vec2(-20, -40));
+	Sequence*actionquake = Sequence::create(action2, action3, nullptr);
+	Sequence*actionflip = Sequence::create(action1, actionquake, actionquake, actionquake, actionquake, action4, nullptr);
+	Sequence*anim = Sequence::create(animate, animate2, animate3, nullptr);
+	// アクションの実行
+	mariofinal->runAction(anim);
+
+	this->addChild(mariofinal, 200);
+
 }
 
 void HelloWorld::viranapproach()
