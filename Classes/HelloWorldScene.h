@@ -65,6 +65,8 @@ public:
 	void viranapproach();
 	void screenmapper();
 	void challengerapproach();
+	void bowsertyoshinoru();
+	void smashappear();
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 	cocos2d::Sprite*sprite;//updateì‡Ç≈ÇÃspriteÇÃëÄçÏ
@@ -80,6 +82,7 @@ public:
 	cocos2d::Sprite*bowser;
 	cocos2d::Sprite*dedede;
 	cocos2d::Sprite*challenger;
+	cocos2d::Sprite*black;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

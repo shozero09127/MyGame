@@ -216,7 +216,7 @@ bool HelloWorld::init()
 
 	this->runAction(countset);
 	this->runAction(action3);
-	this->runAction(mariolast);
+	//this->runAction(mariolast);
 	this->scheduleUpdate();//Update‚Ì—LŒø‰»
 
 	
@@ -360,8 +360,11 @@ void HelloWorld::bowserjump()
 	RotateBy*rotate = RotateBy::create(2.0f, Vec3(0, 720, 0));
 
 	Sequence* dededeaction = Sequence::create(delays, rotate, nullptr);
+	CallFunc*superjump = CallFunc::create(CC_CALLBACK_0(HelloWorld::bowsertyoshinoru, this));
+
+	Sequence* jumpnagare = Sequence::create(dededeaction, superjump, nullptr);
 	bowser->runAction(jump);
-	dedede->runAction(dededeaction);
+	dedede->runAction(jumpnagare);
 }
 void HelloWorld::dokanPop()
 {
@@ -626,4 +629,23 @@ void HelloWorld::challengerapproach()
 	RemoveSelf*remove = RemoveSelf::create();
 	Sequence*actioncut = Sequence::create(action, delays, action2,remove, nullptr);
 	challenger->runAction(actioncut);
+}
+
+void HelloWorld::bowsertyoshinoru()
+{
+	JumpBy* actionjump = JumpBy::create(2.0f, Vec2(0, 0), 500, 1);
+	dedede->runAction(actionjump);
+	DelayTime*delays = DelayTime::create(2.0f);
+	MoveBy*action1 = MoveBy::create(0.02f, Vec2(30, 40));
+	MoveBy*action2 = MoveBy::create(0.04f, Vec2(-20, -20));
+	MoveBy*action3 = MoveBy::create(0.04f, Vec2(20, 20));
+	MoveBy*action4 = MoveBy::create(0.02f, Vec2(-30, -40));
+	Sequence*actionquake = Sequence::create(action2, action3, nullptr);
+	Sequence*actionflip = Sequence::create(delays, action1, actionquake, actionquake, actionquake, actionquake, action4, nullptr);
+	field->runAction(actionflip);
+}
+
+void HelloWorld::smashappear()
+{
+	
 }
