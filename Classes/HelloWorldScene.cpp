@@ -208,7 +208,7 @@ bool HelloWorld::init()
 	CallFunc*challenging = CallFunc::create(CC_CALLBACK_0(HelloWorld::challengerapproach, this));
 	CallFunc*bowserjumping = CallFunc::create(CC_CALLBACK_0(HelloWorld::bowserjump, this));
 	CallFunc*kirbylast = CallFunc::create(CC_CALLBACK_0(HelloWorld::lastSmashkirby, this));
-	CallFunc*mariolast = CallFunc::create(CC_CALLBACK_0(HelloWorld::lastSmashmario, this));
+	
 	DelayTime*delays = DelayTime::create(3.2f);
 	DelayTime*cutdelays = DelayTime::create(0.5f);
 	Sequence*virandelay = Sequence::create(delays, actionviran,screen,cutdelays,challenging,bowserjumping, nullptr);
@@ -413,10 +413,77 @@ void HelloWorld::kirbyStand()
 	warpstark->runAction(action1);
 }
 
+void HelloWorld::kirbyNeutral()
+{
+	warpstark->setTexture("kkk.png");
+
+}
+
+void HelloWorld::kirbySideB()
+{
+	warpstark->setTexture("hammer.png");
+	DelayTime*delays = DelayTime::create(0.5f);
+	CallFunc*kirbystand = CallFunc::create(CC_CALLBACK_0(HelloWorld::kirbyNeutral, this));
+
+	Sequence*kirbyposition = Sequence::create(delays, kirbystand, nullptr);
+	marioawake->runAction(kirbyposition);
+}
+
 void HelloWorld::marioStand()
 {
 	marioawake->setTexture("mariostand.png");
 	marioawake->setScale(1.5f);
+}
+void HelloWorld::marioNB()
+{
+	marioawake->setTexture("mariofireball.png");
+
+	DelayTime*delays = DelayTime::create(0.5f);
+	CallFunc*mariostandup = CallFunc::create(CC_CALLBACK_0(HelloWorld::marioStand, this));
+
+	Sequence*marioposition = Sequence::create(delays,mariostandup, nullptr);
+	marioawake->runAction(marioposition);
+
+}
+void HelloWorld::marioDash()
+{
+	marioawake->setTexture("mariorun.png");
+	marioawake->setScale(0.8f);
+	MoveTo*actionMove1 = MoveTo::create(0.4f, Vec2((width * 50) / 100, (height * 30) / 100));
+	
+	marioawake->runAction(actionMove1);
+
+}
+void HelloWorld::marioDashRunL()
+{
+	marioawake->setTexture("mariorun.png");
+	marioawake->setScale(0.8f);
+	marioawake->setFlippedX(true);
+}
+void HelloWorld::marioBack()
+{
+	JumpTo*stand = JumpTo::create(0.5f, Vec2((width * 50) / 100, (height * 30) / 100), 10, 1);
+
+	MoveTo*mariomove = MoveTo::create(0.4f, Vec2((width * 20) / 100, (height * 30) / 100));
+	CallFunc*marioDash= CallFunc::create(CC_CALLBACK_0(HelloWorld::marioDashRunL, this));
+	CallFunc*mariostanding = CallFunc::create(CC_CALLBACK_0(HelloWorld::marioStand, this));
+	Sequence*marioposition = Sequence::create(stand,marioDash, mariomove, mariostanding,nullptr);
+	marioawake->runAction(marioposition);
+	
+}
+void HelloWorld::mariolastStandby()
+{
+	marioawake->setTexture("s_marioawake.png");
+
+	JumpBy* maction1 = JumpBy::create(1.0f, Vec2(0, (height*30)/100), 100, 1);
+	CallFunc*mariolast = CallFunc::create(CC_CALLBACK_0(HelloWorld::lastSmashmario, this));
+	DelayTime*delays = DelayTime::create(0.25f);
+	CallFunc*smashremove = CallFunc::create(CC_CALLBACK_0(HelloWorld::smashdisappear, this));
+	Sequence*smashmove = Sequence::create(delays, smashremove, nullptr);
+	CallFunc*frameout = CallFunc::create(CC_CALLBACK_0(HelloWorld::bowserframeOut, this));
+	Spawn*smashcrow = Spawn::create(maction1, smashmove, nullptr);
+	Sequence*marioposition = Sequence::create(smashcrow,delays,mariolast,nullptr);
+	marioawake->runAction(marioposition);
 }
 void HelloWorld::countdown()
 {
@@ -523,13 +590,46 @@ void HelloWorld::lastSmashkirby()
 		this->addChild(ultrasword,200);
 	
 }
+void HelloWorld::burstOut()
+{
+	//black->setOpacity(0);
+	// アニメーションパターンからSpriteを生成
+	burst = Sprite::create("burst7.png");
+	burst->setPosition(Vec2(width / 2, height / 2));
+	burst->setScale(1.0f);	// 拡大
+
+	Animation* animation = Animation::create();
+	for (int i = 1; i <=7; i++)
+	{
+		char szName[100] = { 0 };
+		sprintf(szName, "burst%d.png", i);
+		animation->addSpriteFrameWithFile(szName);
+
+	}
+	animation->setDelayPerUnit(0.1f);
+	animation->setRestoreOriginalFrame(true);
+
+	
+
+
+	// アニメーションデータからアニメーションアクションを生成
+	Animate* animate = Animate::create(animation);
+	RemoveSelf*remove = RemoveSelf::create();
+	Sequence*burstanim = Sequence::create(animate, remove, nullptr);
+	// アクションの実行
+	burst->runAction(burstanim);
+
+	this->addChild(burst, 200);
+
+}
 void HelloWorld::lastSmashmario()
 {
-
+	black->setOpacity(0);
 	// アニメーションパターンからSpriteを生成
 	mariofinal = Sprite::create("mariofinal5.png");
 	mariofinal->setPosition(Vec2(width / 2, height / 2));
 	mariofinal->setScale(0.6f);	// 拡大
+	mariofinal->setFlippedX(true);
 
 	Animation* animation = Animation::create();
 	for (int i = 1; i <= 1; i++)
@@ -574,9 +674,10 @@ void HelloWorld::lastSmashmario()
 	MoveBy*action2 = MoveBy::create(0.05f, Vec2(-30, -30));
 	MoveBy*action3 = MoveBy::create(0.05f, Vec2(30, 30));
 	MoveBy*action4 = MoveBy::create(0.03f, Vec2(-20, -40));
+	CallFunc*frameout = CallFunc::create(CC_CALLBACK_0(HelloWorld::bowserframeOut, this));
 	Sequence*actionquake = Sequence::create(action2, action3, nullptr);
 	Sequence*actionflip = Sequence::create(action1, actionquake, actionquake, actionquake, actionquake, action4, nullptr);
-	Sequence*anim = Sequence::create(animate, animate2, animate3, nullptr);
+	Sequence*anim = Sequence::create(animate, animate2, animate3,frameout, nullptr);
 	// アクションの実行
 	mariofinal->runAction(anim);
 
@@ -641,11 +742,82 @@ void HelloWorld::bowsertyoshinoru()
 	MoveBy*action3 = MoveBy::create(0.04f, Vec2(20, 20));
 	MoveBy*action4 = MoveBy::create(0.02f, Vec2(-30, -40));
 	Sequence*actionquake = Sequence::create(action2, action3, nullptr);
-	Sequence*actionflip = Sequence::create(delays, action1, actionquake, actionquake, actionquake, actionquake, action4, nullptr);
+	CallFunc*smashcammon = CallFunc::create(CC_CALLBACK_0(HelloWorld::smashappear, this));
+	Sequence*actionflip = Sequence::create(delays, smashcammon,action1, actionquake, actionquake, actionquake, actionquake, action4, nullptr);
+	Sequence*smashcome = Sequence::create(delays, smashcammon, nullptr);
+	
+	
 	field->runAction(actionflip);
+	//this->runAction(smashcome);
+}
+
+void HelloWorld::dededeaseru()
+{
+	dedede->setTexture("dededebug.png");
 }
 
 void HelloWorld::smashappear()
 {
+	smashball = Sprite::create("smashball.png");
+
+	smashball->setPosition(Vec2(width / 2, (height / 2)+height));
+	DelayTime*delays = DelayTime::create(0.2f);
+	DelayTime*delaysmini = DelayTime::create(0.05f);
+	MoveTo*action1 = MoveTo::create(0.5f, Vec2(width / 2, height / 2));
+	MoveTo*actionMove1 = MoveTo::create(1.0f, Vec2((width * 32) / 100, (height * 30) / 100));
+	EaseIn*actionEase1 = EaseIn::create(actionMove1, 2.0f);
+	MoveTo*actionMove2 = MoveTo::create(0.5f, Vec2((width * 66) / 100, (height * 30) / 100));
+	EaseOut*actionEase2 = EaseOut::create(actionMove2, 2.0f);
+	MoveTo*actionMove3 = MoveTo::create(0.3f, Vec2((width * 50) / 100, (height * 60) / 100));
+	EaseOut*actionEase3 = EaseOut::create(actionMove3, 2.0f);
 	
+	CallFunc*mariofire = CallFunc::create(CC_CALLBACK_0(HelloWorld::marioNB, this));
+	CallFunc*hammer = CallFunc::create(CC_CALLBACK_0(HelloWorld::kirbySideB, this));
+	CallFunc*mariorun = CallFunc::create(CC_CALLBACK_0(HelloWorld::marioDash, this));
+	CallFunc*mariolast = CallFunc::create(CC_CALLBACK_0(HelloWorld::mariolastStandby, this));
+	Sequence*smashcome = Sequence::create(action1, delays, actionEase1,mariofire, actionEase2,delaysmini, mariorun, hammer,actionEase3,mariolast, nullptr);
+	smashball->runAction(smashcome);
+	this->addChild(smashball,80);
 }
+
+void HelloWorld::smashdisappear()
+{
+	RemoveSelf*removesmash = RemoveSelf::create();
+	smashball->runAction(removesmash);
+	black = Sprite::create("black.png");
+	black->setPosition(Vec2((width / 2), (height / 2)));
+	black->setScale(1.5f);
+	black->setOpacity(100);
+	this->addChild(black,150);
+}
+
+void HelloWorld::bowserframeOut()
+{
+    RemoveSelf*remove = RemoveSelf::create();
+	
+	mariofinal->runAction(remove);
+	MoveBy*futtobi = MoveBy::create(0.8f, Vec2(-width, (height*20)/100));
+	EaseIn*actionEase1 = EaseIn::create(futtobi, 2.0f);
+	DelayTime*delays = DelayTime::create(0.2f);
+	CallFunc*burst = CallFunc::create(CC_CALLBACK_0(HelloWorld::bowserdisappear, this));
+	Sequence*smashcome = Sequence::create(actionEase1,burst,nullptr);
+	bowser->runAction(smashcome);
+}
+
+void HelloWorld::bowserdisappear()
+{
+	CallFunc*mariocome = CallFunc::create(CC_CALLBACK_0(HelloWorld::marioBack, this));
+	marioawake->runAction(mariocome);
+	RemoveSelf*remove = RemoveSelf::create();
+	CallFunc*burstbowser = CallFunc::create(CC_CALLBACK_0(HelloWorld::burstOut, this));
+	Sequence*burston = Sequence::create(remove, burstbowser, nullptr);
+	bowser->runAction(burston);
+	MoveBy*action1 = MoveBy::create(0.02f, Vec2(30, 40));
+	MoveBy*action2 = MoveBy::create(0.04f, Vec2(-20, -20));
+	MoveBy*action3 = MoveBy::create(0.04f, Vec2(20, 20));
+	MoveBy*action4 = MoveBy::create(0.02f, Vec2(-30, -40));
+	Sequence*actionquake = Sequence::create(action2, action3, nullptr);
+	Sequence*actionflip = Sequence::create( action1, actionquake, actionquake, actionquake, actionquake, action4, nullptr);
+	field->runAction(actionflip);
+}
+

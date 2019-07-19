@@ -55,18 +55,31 @@ public:
 	void dokanPop();
 	void warpStar();
 	void kirbyStand();
+	void kirbyNeutral();
+	void kirbySideB();
 	void marioStand();
+	void marioNB();
+	void marioDash();
+	void marioDashRunL();
+	void marioBack();
+	void mariolastStandby();
 	void myFunction();
 	void soundPlay();
 	void setRandom();
 	void bowserjump();
 	void lastSmashmario();
 	void lastSmashkirby();
+	void burstOut();
 	void viranapproach();
 	void screenmapper();
 	void challengerapproach();
 	void bowsertyoshinoru();
+	void dededeaseru();
 	void smashappear();
+	void smashdisappear();
+	void bowserframeOut();
+	void bowserdisappear();
+	
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 	cocos2d::Sprite*sprite;//updateì‡Ç≈ÇÃspriteÇÃëÄçÏ
@@ -78,11 +91,13 @@ public:
 	cocos2d::Sprite*marioawake;
 	cocos2d::Sprite*mariofinal;
 	cocos2d::Sprite*ultrasword;
+    cocos2d::Sprite*burst;
 	cocos2d:: Sprite*countmoji[4];
 	cocos2d::Sprite*bowser;
 	cocos2d::Sprite*dedede;
 	cocos2d::Sprite*challenger;
 	cocos2d::Sprite*black;
+	cocos2d::Sprite*smashball;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
