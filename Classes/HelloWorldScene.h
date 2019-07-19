@@ -55,8 +55,11 @@ public:
 	void dokanPop();
 	void warpStar();
 	void kirbyStand();
+	void kirbyRun();
 	void kirbyNeutral();
 	void kirbySideB();
+	void kirbylastStandBy();
+	void kirbyBack();
 	void marioStand();
 	void marioNB();
 	void marioDash();
@@ -70,15 +73,19 @@ public:
 	void lastSmashmario();
 	void lastSmashkirby();
 	void burstOut();
+	void burstOut2();
 	void viranapproach();
 	void screenmapper();
 	void challengerapproach();
 	void bowsertyoshinoru();
 	void dededeaseru();
 	void smashappear();
+	void smashappear2();
 	void smashdisappear();
 	void bowserframeOut();
+	void dededeframeOut();
 	void bowserdisappear();
+	void dedededisappear();
 	
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
