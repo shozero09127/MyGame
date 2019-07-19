@@ -42,6 +42,7 @@ public:
 	int burstID;
 	int bowserAudioID;
 	int dededeAudioID;
+	int smashballID;
 	int timer = 60;
 	int randomscorex;
 	int randomscorey;

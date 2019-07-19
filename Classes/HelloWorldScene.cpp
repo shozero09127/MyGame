@@ -80,7 +80,7 @@ bool HelloWorld::init()
     // create menu, it's an autorelease object
     auto menu = Menu::create(closeItem, NULL);
     menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
+    this->addChild(menu, 300);
 
     /////////////////////////////
     // 3. add your codes below...
@@ -103,96 +103,6 @@ bool HelloWorld::init()
         this->addChild(label, 1);
     }
 
-    // add "HelloWorld" splash screen"
-	//experimental::AudioEngine::play2d("cyrf_satellite_reactor.mp3");
-	
-	//audioID=experimental::AudioEngine::play2d("shortbomb.mp3");
-    //auto sprite = Sprite::create("HelloWorld.png");
-    //if (sprite == nullptr)
-    //{
-    //    problemLoading("'HelloWorld.png'");
-    //}
-    //else
-    //{
-    //    // position the sprite on the center of the screen
-    //    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    //    // add the sprite as a child to this layer
-    //    this->addChild(sprite, 0);
-    //}
-	// テクスチャファイル名を指定して、スプライトを作成
-
-	//乱数の初期化（あっちでいうRandom=new Random();
-		//sprite[i]->setPosition(Vec2((width), (height)));//座標（始点は左下）
-		//float mx, my;
-		//mx = (rand()*600/RAND_MAX)-300;//このままだととんでもなくでかい数値に・・・。
-		//my = (rand()*600 / RAND_MAX)-300;
-		/*MoveTo* action1 = MoveTo::create(1.0f, Vec2(0,height));
-		MoveTo* action2 = MoveTo::create(1.0f, Vec2(0, 0));*/
-		/*
-		MoveTo* action1 = MoveTo::create(1.0f, Vec2(width/2, 0));
-		JumpBy* action2 = JumpBy::create(1.0f, Vec2(100.0f, 0.0f),200.0f,1);*/
-
-		//Sequence* action5 = Sequence::create(action1, action2, action3, action4, nullptr);
-		//Repeat* action2 = Repeat::create(action1,3);//回数を指定して反復
-		//RepeatForever* action2 = RepeatForever::create(action1);//永遠に反復
-		/*Sequence* action3 = Sequence::create(action1, action2, nullptr);
-		FadeTo *action4 = FadeTo::create(1.0f,0000);
-		FadeTo *action5 = FadeTo::create(1.0f, 255);
-		Sequence* action6 = Sequence::create(action4, action5, nullptr);
-		Spawn* action7 = Spawn::create(action3, action6, nullptr);
-		Repeat* action8 = Repeat::create(action7, 5);*/
-		//Repeat *action3 = Repeat::create(action2,100);
-		//Sequence *action4 = Sequence::create(action1, action3, nullptr);//これだとRepeatForeverのアクションが呼び出されない。
-		//
-		//順番で実行する。
-		/*sprite[i]->runAction(action4);*/
-		/*
-		MoveTo* action3 = MoveTo::create(1.0f, Vec2(width, height));
-		EaseIn* action4 = EaseIn::create(action3, 2.0f);
-		sprite[i]->runAction(action4);*
-	// シーングラフにつなぐ
-	/*sprite[1] = Sprite::create("shien.png");
-	this->addChild(sprite[1]);
-	sprite[1]->setScaleX(0.25f);
-	sprite[1]->setScaleY(0.3f);
-	sprite[1]->setPosition(Vec2((width ) / 2, (height ) / 2));
-	sprite[1]->setOpacity(0x00);
-	FadeTo*action3 = FadeTo::create(1.0f, 255);
-	EaseIn* action4 = EaseIn::create(action3, 2.0f);
-	sprite[1]->runAction(action4);*/
-	//MoveBy=指定した座標分移動する。
-	//MoveTo=指定した座標に移動する。
-	
-	//EaseIn 元になるアクションを指定し、それを加速させる。
-	//FadeTo 指定したフェードに変化する。
-	//ScaleBy 指定した大きさへ変化する。Toは変更の影響を受ける。
-	//JumpBy 指定した座標へ指定した高さに到達したジャンプへ指定した回数行い移動する。
-	//RotateBy 指定した座標分回転する。対応する軸で変更する。度数参照。
-	//Blink 指定回数点滅する。青背景に赤画像でやるのは絶対にやめよう（迫真）
-
-	//spriterect->setPosition(Vec2(width / 2, height / 2));
-	//sprite->setAnchorPoint(Vec2(0.5f, 0.5f));//画像の左下が0,0右上が1,0の座標系
-	////sprite2->setPosition(Vec2(width / 2, height / 2));//座標（始点は左下）
-	////sprite2->setAnchorPoint(Vec2(1.0f, 0.0f));//画像の左下が0,0右上が1,0の座標系
-	
-	//sprite2->setOpacity(0);
-	////sprite->setRotation(45.0f);
-	//sprite->setFlippedX(true);//左右反転
-	////sprite->setFlippedY(true);//上下反転
-	//sprite->setVisible(true);//表示するか否か
-	//sprite->setVisible(true);//表示するか否か
-	//scenewidth = width - spritewidth;
-	//sceneheight = height - spriteheight;
-	//sprite->setColor(Color3B(0.0f, 0.0f, 255.0f));//色合いの設定
-	//
-
-	////sprite->setOpacity(0x80);//不透明度の設定
-	////最後の設定が反映される
-	//state = 0;
-	//walk = 0;
-	/*CallFunc*action = CallFunc::create(CC_CALLBACK_0(HelloWorld::myFunction, this));
-	this->runAction(action);*/
 
 	countdownID = experimental::AudioEngine::play2d("senjo.mp3", true);
 	field = Sprite::create("senjo.png");
@@ -224,7 +134,6 @@ bool HelloWorld::init()
 	this->addChild(black, 150);
 	this->runAction(countset);
 	this->runAction(action3);
-	//this->runAction(mariolast);
 	this->scheduleUpdate();//Updateの有効化
 
 	
@@ -273,101 +182,6 @@ void HelloWorld::update(float delta)
 		
 	}
 	staffroll->setPosition(pos);
-	/*timer--;
-	if (timer == 0)
-	{
-		CallFunc*action = CallFunc::create(CC_CALLBACK_0(HelloWorld::setRandom, this));
-		this->runAction(action);
-		CallFunc*action1 = CallFunc::create(CC_CALLBACK_0(HelloWorld::myFunction, this));
-		this->runAction(action1);
-		CallFunc*action2 = CallFunc::create(CC_CALLBACK_0(HelloWorld::soundPlay, this));
-		this->runAction(action2);
-		timer = 60;
-	}*/
-//	Vec2 pos ;//現在座標の獲得
-//	switch (state)
-//	{
-//	case 0:
-//		pos = sprite->getPosition();
-//		pos += Vec2(-5.0f, 0.0f);
-//		sprite->setPosition(pos);
-//		if (pos.x <= 0)
-//		{
-//			state = 1;
-//			sprite->setFlippedX(false);
-//		}
-//			
-//		break;
-//	case 1:
-//			state = 2;
-//		break;
-//	case 2:
-//		pos = sprite->getPosition();
-//		pos += Vec2(5.0f, 0.0f);
-//		sprite->setPosition(pos);
-//		if (pos.x>=width)
-//		{
-//			state = 3;
-//			sprite->setFlippedX(true);
-//		}
-//		break;
-//	case 3:
-//			state = 0;
-//		break;
-//	}
-//
-//	switch (walk)
-//	{
-//	case 0:
-//		
-//		spriterect->setTextureRect(Rect(40.0f, 48.0f, 32.0f, 32.0f));
-//		walk = 1;
-//		break;
-//	case 1:
-//		spriterect->setTextureRect(Rect(0.0f, 48.0f, 32.0f, 32.0f));
-//		walk = 2;
-//		break;
-//	case 2:
-//		spriterect->setTextureRect(Rect(40.0f, 48.0f, 32.0f, 32.0f));
-//		walk = 3;
-//		break;
-//	case 3:
-//		spriterect->setTextureRect(Rect(80.0f, 48.0f, 32.0f, 32.0f));
-//		walk = 0;
-//		break;
-//	}
-//	//ここに更新処理を書く。
-//	
-//	
-//	//float rotate = sprite->getRotation();
-//	//float opacity = sprite->getOpacity();
-//
-//
-//	float b = sprite->getColor().b;
-//	float r = sprite->getColor().r;
-//	float g = sprite->getColor().g;
-//	b-=1.0f;
-//	r+=1.0f;
-//	sprite->setColor(Color3B(r,g,b));
-//
-///*
-//	opacity -= 51.0f/60.0f;*/
-//	/*if (pos.x>=0&&pos.x<width&&pos.y==0)
-//		vel= Vec2(1.0f, 0.0f);
-//
-//	else if (pos.x ==width  && pos.y >=0&&pos.y<height)
-//		vel= Vec2(0.0f, 1.0f);
-//
-//	else if (pos.x <=width && pos.x > 0&&pos.y == height)
-//		vel= Vec2(-1.0f, 0.0f);
-//
-//	else if (pos.x == 0&& pos.y <= height&&pos.y > 0)
-//		vel= Vec2(0.0f, -1.0f);*/
-//	/*rotate += 1.0f;
-//	sprite->setOpacity(opacity);
-//	sprite2->setOpacity(-opacity);*/
-//	//sprite->setRotation(rotate);
-//	//獲得→書き換え→反映　これのループ
 }
 
 void HelloWorld::myFunction()
@@ -431,12 +245,6 @@ void HelloWorld::warpStar()
 	CallFunc*action3 = CallFunc::create(CC_CALLBACK_0(HelloWorld::kirbyStand, this));
 	Sequence* action4 = Sequence::create(action1, action2,action3,  nullptr);
 	warpstark->runAction(action4);
-	/*
-	dokan->setScale(0.7f);
-	MoveBy* action1 = MoveBy::create(0.5f, Vec2(0, 40));
-	MoveBy* action2 = MoveBy::create(0.5f, Vec2(0, -40));
-	Sequence* action4 = Sequence::create(action1, action2, nullptr);*//*
-	dokan->runAction(action4);*/
 	this->addChild(warpstark,5);
 }
 
@@ -456,6 +264,7 @@ void HelloWorld::kirbyNeutral()
 void HelloWorld::kirbySideB()
 {
 	kirbyAudioID = experimental::AudioEngine::play2d("kirbyVOICESB.mp3");
+	smashballID = experimental::AudioEngine::play2d("smashball1.mp3");
 	warpstark->setTexture("hammer.png");
 	DelayTime*delays = DelayTime::create(0.5f);
 	CallFunc*kirbystand = CallFunc::create(CC_CALLBACK_0(HelloWorld::kirbyNeutral, this));
@@ -496,6 +305,8 @@ void HelloWorld::marioStand()
 }
 void HelloWorld::marioNB()
 {
+	smashballID = experimental::AudioEngine::play2d("smashball1.mp3");
+	marioAudioID = experimental::AudioEngine::play2d("fireball.mp3");
 	marioawake->setTexture("mariofireball.png");
 
 	DelayTime*delays = DelayTime::create(0.5f);
@@ -543,7 +354,7 @@ void HelloWorld::marioBack()
 void HelloWorld::mariolastStandby()
 {
 	marioawake->setTexture("s_marioawake.png");
-
+	marioAudioID = experimental::AudioEngine::play2d("mariojump.mp3");
 	JumpBy* maction1 = JumpBy::create(1.0f, Vec2(0, (height*30)/100), 100, 1);
 	CallFunc*mariolast = CallFunc::create(CC_CALLBACK_0(HelloWorld::lastSmashmario, this));
 	DelayTime*delays = DelayTime::create(0.25f);
@@ -666,6 +477,8 @@ void HelloWorld::lastSmashkirby()
 void HelloWorld::burstOut()
 {
 	burstID = experimental::AudioEngine::play2d("burst.mp3");
+
+	burstID = experimental::AudioEngine::play2d("BVOICE1.mp3");
 	//black->setOpacity(0);
 	// アニメーションパターンからSpriteを生成
 	burst = Sprite::create("burst7.png");
@@ -699,6 +512,7 @@ void HelloWorld::burstOut()
 void HelloWorld::burstOut2()
 {
 	burstID = experimental::AudioEngine::play2d("burst.mp3");
+	burstID = experimental::AudioEngine::play2d("BVOICE.mp3");
 	//black->setOpacity(0);
 	// アニメーションパターンからSpriteを生成
 	burst = Sprite::create("burst7.png");
@@ -922,7 +736,8 @@ void HelloWorld::bowsertyoshinoru()
 	MoveBy*action4 = MoveBy::create(0.02f, Vec2(-30, -40));
 	Sequence*actionquake = Sequence::create(action2, action3, nullptr);
 	CallFunc*smashcammon = CallFunc::create(CC_CALLBACK_0(HelloWorld::smashappear, this));
-	Sequence*actionflip = Sequence::create(delays, smashcammon,action1, actionquake, actionquake, actionquake, actionquake, action4, nullptr);
+	CallFunc*powsound = CallFunc::create(CC_CALLBACK_0(HelloWorld::powset, this));
+	Sequence*actionflip = Sequence::create(delays, powsound,smashcammon,action1, actionquake, actionquake, actionquake, actionquake, action4, nullptr);
 	
 	
 	field->runAction(actionflip);
@@ -943,7 +758,8 @@ void HelloWorld::dededeaseru()
 	MoveBy*action4 = MoveBy::create(0.02f, Vec2(-30, -40));
 	Sequence*actionquake = Sequence::create(action2, action3, nullptr);
 	CallFunc*smashcammon = CallFunc::create(CC_CALLBACK_0(HelloWorld::smashappear2, this));
-	Sequence*actionflip = Sequence::create(delays, smashcammon, action1, actionquake, actionquake, actionquake, actionquake, action4, nullptr);
+	CallFunc*powsound = CallFunc::create(CC_CALLBACK_0(HelloWorld::powset, this));
+	Sequence*actionflip = Sequence::create(delays, powsound,smashcammon, action1, actionquake, actionquake, actionquake, actionquake, action4, nullptr);
 
 
 	field->runAction(actionflip);
@@ -953,7 +769,7 @@ void HelloWorld::dededeaseru()
 void HelloWorld::smashappear()
 {
 	smashball = Sprite::create("smashball.png");
-
+	smashballID = experimental::AudioEngine::play2d("smashball.mp3");
 	smashball->setPosition(Vec2(width / 2, (height / 2)+height));
 	DelayTime*delays = DelayTime::create(0.2f);
 	DelayTime*delaysmini = DelayTime::create(0.05f);
@@ -978,7 +794,7 @@ void HelloWorld::smashappear2()
 {
 	marioawake->setFlippedX(false);
 	smashball = Sprite::create("smashball.png");
-
+	smashballID = experimental::AudioEngine::play2d("smashball.mp3");
 	smashball->setPosition(Vec2(width / 2, (height / 2) + height));
 	DelayTime*delays = DelayTime::create(0.2f);
 	DelayTime*delaysmini = DelayTime::create(0.05f);
@@ -1001,6 +817,8 @@ void HelloWorld::smashappear2()
 
 void HelloWorld::smashdisappear()
 {
+	smashballID = experimental::AudioEngine::play2d("smashball1.mp3");
+	smashballID = experimental::AudioEngine::play2d("smashball2.mp3");
 	RemoveSelf*removesmash = RemoveSelf::create();
 	smashball->runAction(removesmash);
 	
