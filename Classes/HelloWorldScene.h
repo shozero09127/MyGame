@@ -34,10 +34,18 @@ public:
 	int state;//0=Å©,1=Å´,2=Å®,3=Å™
 	int walk;//0=stay,1=right,2=stay,3=left
 	int audioID;
+	int marioAudioID;
+	int mariolastID;
+	int kirbyAudioID;
 	int countdownID;
+	int POWID;
+	int burstID;
+	int bowserAudioID;
+	int dededeAudioID;
 	int timer = 60;
 	int randomscorex;
 	int randomscorey;
+	bool isEndFlag;
 	float width;
 	float height;
 	float spritewidth;
@@ -71,10 +79,20 @@ public:
 	void setRandom();
 	void bowserjump();
 	void lastSmashmario();
+	void lastmarioset();
+	void lastmarioSEset();
+	void lastmarioSEset2();
 	void lastSmashkirby();
+	void lastkirbyset();
+	void lastkirbySEset();
+	void lastkirbySEset2();
+	void lastkirbySEset3();
 	void burstOut();
 	void burstOut2();
 	void viranapproach();
+	void powset();
+	void bowserlaugh();
+	void bowserlaugh2();
 	void screenmapper();
 	void challengerapproach();
 	void bowsertyoshinoru();
@@ -86,6 +104,7 @@ public:
 	void dededeframeOut();
 	void bowserdisappear();
 	void dedededisappear();
+	void ending();
 	
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
@@ -105,6 +124,7 @@ public:
 	cocos2d::Sprite*challenger;
 	cocos2d::Sprite*black;
 	cocos2d::Sprite*smashball;
+	cocos2d::Sprite*staffroll;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

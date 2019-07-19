@@ -194,10 +194,12 @@ bool HelloWorld::init()
 	/*CallFunc*action = CallFunc::create(CC_CALLBACK_0(HelloWorld::myFunction, this));
 	this->runAction(action);*/
 
-	audioID = countdownID = experimental::AudioEngine::play2d("senjo.mp3", true);
+	countdownID = experimental::AudioEngine::play2d("senjo.mp3", true);
 	field = Sprite::create("senjo.png");
 	field->setPosition(Vec2(width / 2, height / 2)); 
-	
+	staffroll = Sprite::create("endroll.png");
+	staffroll->setPosition(Vec2(width / 2, -(height*55)/100));
+	isEndFlag = false;
 	this->addChild(field,1);
 	CallFunc*maction = CallFunc::create(CC_CALLBACK_0(HelloWorld::dokanPop, this));
 	CallFunc*kaction = CallFunc::create(CC_CALLBACK_0(HelloWorld::warpStar, this));
@@ -214,6 +216,12 @@ bool HelloWorld::init()
 	Sequence*virandelay = Sequence::create(delays, actionviran,screen,cutdelays,challenging,bowserjumping, nullptr);
 	Sequence*countset = Sequence::create(countaction, virandelay, nullptr);
 
+	black = Sprite::create("black.png");
+	black->setPosition(Vec2((width / 2), (height / 2)));
+	black->setScale(1.5f);
+	black->setOpacity(0);
+	this->addChild(staffroll, 160);
+	this->addChild(black, 150);
 	this->runAction(countset);
 	this->runAction(action3);
 	//this->runAction(mariolast);
@@ -242,6 +250,29 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 void HelloWorld::update(float delta)
 {
+	float opacity = black->getOpacity();
+	Vec2 pos = staffroll->getPosition();
+	if (isEndFlag == true)
+	{
+		if (opacity < 254)
+		{
+
+			opacity = opacity + 2;
+		}
+		else
+		{
+			opacity = 255;
+		}
+
+		black->setOpacity(opacity);
+
+	}
+	if (opacity == 255)
+	{
+		pos = pos + Vec2(0.0f, 1.5f);
+		
+	}
+	staffroll->setPosition(pos);
 	/*timer--;
 	if (timer == 0)
 	{
@@ -368,6 +399,7 @@ void HelloWorld::bowserjump()
 }
 void HelloWorld::dokanPop()
 {
+	marioAudioID = experimental::AudioEngine::play2d("mariostandVOICE.mp3");
 	dokan = Sprite::create("s_dokan.png");
 	marioawake = Sprite::create("s_marioawake.png");
 	dokan->setPosition(Vec2((width * 20) / 100, (height * 25) / 100));
@@ -388,6 +420,8 @@ void HelloWorld::dokanPop()
 }
 void HelloWorld::warpStar()
 {
+
+	kirbyAudioID = experimental::AudioEngine::play2d("kirbyUP.mp3");
 	warpstark = Sprite::create("kirbywarpstar.png");
 	warpstark->setPosition(Vec2((width * 105) / 100, (height * 105) / 100));
 	warpstark->setScale(0.5f);
@@ -421,6 +455,7 @@ void HelloWorld::kirbyNeutral()
 
 void HelloWorld::kirbySideB()
 {
+	kirbyAudioID = experimental::AudioEngine::play2d("kirbyVOICESB.mp3");
 	warpstark->setTexture("hammer.png");
 	DelayTime*delays = DelayTime::create(0.5f);
 	CallFunc*kirbystand = CallFunc::create(CC_CALLBACK_0(HelloWorld::kirbyNeutral, this));
@@ -521,7 +556,6 @@ void HelloWorld::mariolastStandby()
 }
 void HelloWorld::countdown()
 {
-
 	countdownID = experimental::AudioEngine::play2d("countdowncut.mp3");
 	countmoji[3] = Sprite::create("3.png");
 	countmoji[2] = Sprite::create("2.png");
@@ -622,13 +656,16 @@ void HelloWorld::lastSmashkirby()
 		Sequence*anim = Sequence::create(animate, animate2,animate3,animate4,actionflip, frameout
 			,nullptr);
 		// アクションの実行
-		ultrasword->runAction(anim);
+		CallFunc*seset = CallFunc::create(CC_CALLBACK_0(HelloWorld::lastkirbyset, this));
+		Spawn*animset = Spawn::create(anim, seset, nullptr);
+		ultrasword->runAction(animset);
 
 		this->addChild(ultrasword,200);
 	
 }
 void HelloWorld::burstOut()
 {
+	burstID = experimental::AudioEngine::play2d("burst.mp3");
 	//black->setOpacity(0);
 	// アニメーションパターンからSpriteを生成
 	burst = Sprite::create("burst7.png");
@@ -661,6 +698,7 @@ void HelloWorld::burstOut()
 }
 void HelloWorld::burstOut2()
 {
+	burstID = experimental::AudioEngine::play2d("burst.mp3");
 	//black->setOpacity(0);
 	// アニメーションパターンからSpriteを生成
 	burst = Sprite::create("burst7.png");
@@ -694,6 +732,7 @@ void HelloWorld::burstOut2()
 }
 void HelloWorld::lastSmashmario()
 {
+	marioAudioID = experimental::AudioEngine::play2d("mariofinal.mp3");
 	black->setOpacity(0);
 	// アニメーションパターンからSpriteを生成
 	mariofinal = Sprite::create("mariofinal5.png");
@@ -748,32 +787,100 @@ void HelloWorld::lastSmashmario()
 	Sequence*actionquake = Sequence::create(action2, action3, nullptr);
 	Sequence*actionflip = Sequence::create(action1, actionquake, actionquake, actionquake, actionquake, action4, nullptr);
 	Sequence*anim = Sequence::create(animate, animate2, animate3,frameout, nullptr);
+	CallFunc*seset = CallFunc::create(CC_CALLBACK_0(HelloWorld::lastmarioset, this));
+	Spawn*animset = Spawn::create(anim, seset, nullptr);
 	// アクションの実行
-	mariofinal->runAction(anim);
+	mariofinal->runAction(animset);
 
 	this->addChild(mariofinal, 200);
 
 }
 
+void HelloWorld::lastmarioset()
+{
+	CallFunc*lastseOn = CallFunc::create(CC_CALLBACK_0(HelloWorld::lastmarioSEset, this));
+	CallFunc*lastseOn2 = CallFunc::create(CC_CALLBACK_0(HelloWorld::lastmarioSEset2, this));
+	DelayTime*delays = DelayTime::create(1.1f);
+	DelayTime*delays2 = DelayTime::create(0.125f);
+	Sequence*flameon = Sequence::create(lastseOn, delays2, lastseOn2, delays2, nullptr);
+	Repeat*flameRepeat = Repeat::create(flameon, 8);
+	Sequence*mariofinalon= Sequence::create(delays,lastseOn,flameRepeat, nullptr);
+	mariofinal->runAction(mariofinalon);
+
+}
+
+void HelloWorld::lastmarioSEset()
+{
+	mariolastID = experimental::AudioEngine::play2d("mariolastSE.mp3");
+}
+void HelloWorld::lastmarioSEset2()
+{
+	mariolastID = experimental::AudioEngine::play2d("mariolastSE2.mp3");
+}
+
+void HelloWorld::lastkirbyset()
+{
+	kirbyAudioID= experimental::AudioEngine::play2d("kirbylastVOICE1.mp3");
+	CallFunc*lastseOn = CallFunc::create(CC_CALLBACK_0(HelloWorld::lastkirbySEset, this));
+	CallFunc*lastseOn2 = CallFunc::create(CC_CALLBACK_0(HelloWorld::lastkirbySEset2, this));
+	CallFunc*lastseOn3 = CallFunc::create(CC_CALLBACK_0(HelloWorld::lastkirbySEset3, this));
+	DelayTime*delays = DelayTime::create(0.3f);
+	DelayTime*delays2 = DelayTime::create(0.25f);
+	Sequence*slash = Sequence::create( lastseOn,delays2,nullptr);
+	Repeat*slashRepeat = Repeat::create(slash, 7);
+	DelayTime*delays3 = DelayTime::create(0.85f);
+	DelayTime*delays4 = DelayTime::create(1.2f);
+	
+	Sequence*ultraswordon = Sequence::create(delays,lastseOn,delays2,delays3,slashRepeat,lastseOn2,delays4,lastseOn3,nullptr);
+	ultrasword->runAction(ultraswordon);
+
+}
+
+void HelloWorld::lastkirbySEset()
+{
+	mariolastID = experimental::AudioEngine::play2d("slashSE1.mp3");
+}
+void HelloWorld::lastkirbySEset2()
+{
+	
+	kirbyAudioID = experimental::AudioEngine::play2d("kirbylastVOICE2.mp3");
+}
+void HelloWorld::lastkirbySEset3()
+{
+	mariolastID = experimental::AudioEngine::play2d("slashSE2.mp3");
+	kirbyAudioID = experimental::AudioEngine::play2d("kirbylastVOICE3.mp3");
+}
 void HelloWorld::viranapproach()
 {
 	dedede = Sprite::create("dededestand.png");
 
 	bowser = Sprite::create("bowserstand.png");
-
+	CallFunc*powsound = CallFunc::create(CC_CALLBACK_0(HelloWorld::powset, this));;
 	dedede->setPosition(Vec2((width * 75) / 100, (height * 130) / 100));
 
 	bowser->setPosition(Vec2((width * 25) / 100, (height * 130) / 100));
-
 	JumpBy* actionjump = JumpBy::create(0.3f, Vec2(0, -(height * 65) / 100), 70, 1);
-
+	Sequence*actionbowser= Sequence::create(actionjump, powsound, nullptr);
 	JumpBy* actionjump2 = JumpBy::create(0.3f, Vec2(0, -(height * 65) / 100), 70, 1);
-	dedede->runAction(actionjump);
-	bowser->runAction(actionjump2);
+	Sequence*actiondedede = Sequence::create(actionjump2, powsound, nullptr);
+	dedede->runAction(actionbowser);
+	bowser->runAction(actiondedede);
 	this->addChild(dedede,5);
 	this->addChild(bowser,5);
 }
 
+void HelloWorld::powset()
+{
+	POWID = experimental::AudioEngine::play2d("POWSE.mp3");
+}
+
+void HelloWorld::bowserlaugh()
+{
+	POWID = experimental::AudioEngine::play2d("POWSE.mp3");
+}
+void HelloWorld::bowserlaugh2()
+{
+}
 void HelloWorld::screenmapper()
 {
 
@@ -789,6 +896,8 @@ void HelloWorld::screenmapper()
 
 void HelloWorld::challengerapproach()
 {
+
+	
 	challenger = Sprite::create("challengers.png");
 	challenger->setPosition(Vec2((width / 2)+width, height / 2));
 	this->addChild(challenger,20);
@@ -894,11 +1003,8 @@ void HelloWorld::smashdisappear()
 {
 	RemoveSelf*removesmash = RemoveSelf::create();
 	smashball->runAction(removesmash);
-	black = Sprite::create("black.png");
-	black->setPosition(Vec2((width / 2), (height / 2)));
-	black->setScale(1.5f);
+	
 	black->setOpacity(100);
-	this->addChild(black,150);
 }
 
 void HelloWorld::bowserframeOut()
@@ -957,7 +1063,13 @@ void HelloWorld::dedededisappear()
 	MoveBy*action3 = MoveBy::create(0.04f, Vec2(20, 20));
 	MoveBy*action4 = MoveBy::create(0.02f, Vec2(-30, -40));
 	Sequence*actionquake = Sequence::create(action2, action3, nullptr);
-	Sequence*actionflip = Sequence::create(action1, actionquake, actionquake, actionquake, actionquake, action4, nullptr);
+	CallFunc*endroll = CallFunc::create(CC_CALLBACK_0(HelloWorld::ending, this));
+	Sequence*actionflip = Sequence::create(action1, actionquake, actionquake, actionquake, actionquake, action4,endroll,nullptr);
 	field->runAction(actionflip);
+}
+
+void HelloWorld::ending()
+{
+	isEndFlag = true;
 }
 
